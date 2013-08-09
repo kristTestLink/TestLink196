@@ -267,7 +267,7 @@ class tlReqMgrSystem extends tlObject
    * Gets all Requirements of a Test Project.
    * 
    * $id = project id
-   * @return m
+   * @return Map of result
    */
   function getAllRequirements($id)
   {

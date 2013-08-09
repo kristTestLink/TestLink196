@@ -4864,8 +4864,6 @@ protected function createAttachmentTempFile()
    */
   public function getRequirements($args)
   {
-//   	$db = $this->dbObj;
-//     $result = tlReqMgrSystem::getAllRequirements($db);
     $result = tlReqMgrSystem::getAllRequirements($args[self::$testProjectIDParamName]);
     
     return $result;
