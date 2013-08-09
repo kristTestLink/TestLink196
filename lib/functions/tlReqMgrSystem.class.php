@@ -253,9 +253,6 @@ class tlReqMgrSystem extends tlObject
   } //function end
 
 
-
-
-
   /**
    *
    */
@@ -265,26 +262,45 @@ class tlReqMgrSystem extends tlObject
   	return $this->getByAttr(array('key' => 'id', 'value' => $id),$options);
   }
 
+ 
   /**
-   *
+   * Gets all Requirements of a Test Project.
+   * 
+   * $id = project id
+   * @return m
    */
-  function getAllRequirements($db)
+  function getAllRequirements($id)
   {
     
     $debugMsg = 'Class:' . __CLASS__ . ' - Method: ' . __FUNCTION__;
-    
-    $sql = "/* debugMsg */ SELECT requirements.*, "
-    		. "req_coverage.testcase_id, "
-    		. "req_specs.testproject_id, req_specs.doc_id, "
-    		. "req_versions.scope, req_versions.author_id, req_versions.creation_ts, req_versions.status, "
-    		. "attachments.title, attachments.file_name, attachments.file_path, attachments.file_type, attachments.content FROM "
-    		. DB_TABLE_PREFIX . "requirements INNER JOIN "
-    		. DB_TABLE_PREFIX . "req_coverage ON requirements.id = req_coverage.req_id INNER JOIN "
-    		. DB_TABLE_PREFIX . "req_specs ON requirements.srs_id = req_specs.id INNER JOIN "
-    		. DB_TABLE_PREFIX . "req_versions ON (req_versions.id-1) = requirements.id LEFT JOIN "
-    		. DB_TABLE_PREFIX . "attachments ON attachments.fk_id = requirements.id";
+    $sql = "/* debugMsg */ SELECT "
+    		. "{$this->tables['requirements']}.*, "
+    		. "{$this->tables['req_coverage']}.testcase_id, "
+    		. "{$this->tables['req_specs']}.testproject_id, "
+    		. "{$this->tables['req_specs']}.doc_id, "
+    		. "{$this->tables['req_specs_revisions']}.name, "
+    		. "{$this->tables['req_versions']}.scope, "
+    		. "{$this->tables['req_versions']}.author_id, "
+    		. "{$this->tables['req_versions']}.creation_ts, "
+    		. "{$this->tables['req_versions']}.status, "
+    		. "{$this->tables['req_versions']}.type FROM "
+    		. "{$this->tables['requirements']} INNER JOIN "
+    		. "{$this->tables['req_coverage']} ON "
+    		. "{$this->tables['requirements']}.id = "
+    		. "{$this->tables['req_coverage']}.req_id INNER JOIN "
+    		. "{$this->tables['req_specs']} ON "
+    		. "{$this->tables['requirements']}.srs_id = "
+    		. "{$this->tables['req_specs']}.id INNER JOIN "
+    		. "{$this->tables['req_specs_revisions']} ON "
+    		. "{$this->tables['req_specs']}.id = "
+    		. "{$this->tables['req_specs_revisions']}.parent_id INNER JOIN "
+    		. "{$this->tables['req_versions']} ON ("
+    		. "{$this->tables['req_versions']}.id-1) = "
+    		. "{$this->tables['requirements']}.id"
+	    	. "WHERE "
+    		. "{$this->tables['req_specs']}.testproject_id = ".$id."";
 
-    $rs = $db->get_recordset($sql);
+    $rs = $this->db->get_recordset($sql);
     
     return $rs;
     

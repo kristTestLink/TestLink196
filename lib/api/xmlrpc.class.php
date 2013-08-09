@@ -4853,15 +4853,20 @@ protected function createAttachmentTempFile()
   }
 
   /**
+   * Gets all Requirements of a Test Project.
+   * 
+   * @param struct $args
+   * @param int    $args["testprojectid"]: project id
    * 
    * @return Map result
    *
    * @access public
    */
-  public function getRequirements()
+  public function getRequirements($args)
   {
-  	$db = $this->dbObj;
-    $result = tlReqMgrSystem::getAllRequirements($db);
+//   	$db = $this->dbObj;
+//     $result = tlReqMgrSystem::getAllRequirements($db);
+    $result = tlReqMgrSystem::getAllRequirements($args[self::$testProjectIDParamName]);
     
     return $result;
   }
